@@ -33,19 +33,19 @@
         <!-- Featured Products -->
         <div>
             <h2 class="text-2xl font-bold mb-6">Featured Products</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
                 @foreach($featuredProducts as $product)
                     <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
-                        <div class="h-48 bg-gray-200 rounded-t-lg flex items-center justify-center">
+                        <div class="h-24 w-full bg-gray-200 rounded-t-lg flex items-center justify-center overflow-hidden">
                             @if($product->image)
-                                <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="h-full w-full object-cover rounded-t-lg">
+                                <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="h-full w-full object-contain rounded-t-lg">
                             @else
                                 <svg class="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
                                 </svg>
                             @endif
                         </div>
-                        <div class="p-4">
+                        <div class="p-3">
                             <h3 class="font-semibold text-lg mb-2">{{ $product->name }}</h3>
                             <p class="text-gray-600 text-sm mb-2">{{ $product->size }}</p>
                             <div class="flex justify-between items-center">

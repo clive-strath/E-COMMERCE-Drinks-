@@ -17,6 +17,7 @@ class CategorySeeder extends Seeder
             ['name' => 'Fresh Juice', 'slug' => 'fresh-juice'],
             ['name' => 'Energy Drinks', 'slug' => 'energy-drinks'],
             ['name' => 'Bottled Water', 'slug' => 'bottled-water'],
+            ['name' => 'Hot Beverages', 'slug' => 'hot-beverages'],
             ['name' => 'Combo Packs', 'slug' => 'combo-packs'],
         ];
 

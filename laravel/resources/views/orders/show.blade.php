@@ -30,9 +30,9 @@
                     <div class="space-y-4">
                         @foreach($order->orderItems as $item)
                             <div class="flex items-center gap-4 pb-4 border-b last:border-b-0">
-                                <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <div class="w-16 h-10 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
                                     @if($item->product->image)
-                                        <img src="{{ Storage::url($item->product->image) }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover rounded-lg">
+                                        <img src="{{ Storage::url($item->product->image) }}" alt="{{ $item->product->name }}" class="w-full h-full object-contain rounded-lg">
                                     @else
                                         <svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>

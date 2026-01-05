@@ -17,9 +17,9 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Product Image -->
             <div class="bg-white rounded-lg shadow p-8">
-                <div class="h-96 bg-gray-200 rounded-lg flex items-center justify-center">
+                <div class="h-48 w-full bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
                     @if($product->image)
-                        <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="h-full w-full object-cover rounded-lg">
+                        <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="h-full w-full object-contain rounded-lg">
                     @else
                         <svg class="w-32 h-32 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
@@ -97,9 +97,9 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach($relatedProducts as $relatedProduct)
                         <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
-                            <div class="h-32 bg-gray-200 rounded-t-lg flex items-center justify-center">
+                            <div class="h-16 w-full bg-gray-200 rounded-t-lg flex items-center justify-center overflow-hidden">
                                 @if($relatedProduct->image)
-                                    <img src="{{ Storage::url($relatedProduct->image) }}" alt="{{ $relatedProduct->name }}" class="h-full w-full object-cover rounded-t-lg">
+                                    <img src="{{ Storage::url($relatedProduct->image) }}" alt="{{ $relatedProduct->name }}" class="h-full w-full object-contain rounded-t-lg">
                                 @else
                                     <svg class="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
