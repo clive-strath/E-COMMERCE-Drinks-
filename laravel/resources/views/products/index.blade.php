@@ -35,48 +35,55 @@
         </div>
 
         <!-- Products Grid -->
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($products as $product)
-                <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
-                    <div class="h-24 w-full bg-gray-200 rounded-t-lg flex items-center justify-center overflow-hidden">
+                <div class="bg-white rounded-lg shadow hover:shadow-lg transition flex flex-col h-full">
+                    <a href="{{ route('products.show', $product) }}" class="h-64 w-full bg-white rounded-t-lg flex items-center justify-center overflow-hidden p-4 border-b border-gray-100 block">
                         @if($product->image)
-                            <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="h-full w-full object-contain rounded-t-lg">
+                            <img src="{{ Storage::url($product->image) }}" alt="{{ $product->name }}" class="max-h-full max-w-full object-contain">
                         @else
-                            <svg class="w-16 h-16 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-20 h-20 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
                             </svg>
                         @endif
-                    </div>
-                    <div class="p-3">
-                        <span class="text-xs text-blue-600 font-semibold">{{ $product->category->name }}</span>
-                        <h3 class="font-semibold text-lg mb-2">{{ $product->name }}</h3>
-                        <p class="text-gray-600 text-sm mb-2">{{ $product->size }}</p>
-                        <p class="text-gray-700 text-sm mb-3">{{ Str::limit($product->description, 80) }}</p>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-2xl font-bold text-blue-600">${{ number_format($product->price, 2) }}</span>
-                            <span class="text-sm {{ $product->stock > 0 ? 'text-green-600' : 'text-red-600' }}">
-                                {{ $product->stock > 0 ? "{$product->stock} in stock" : 'Out of stock' }}
-                            </span>
+                    </a>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="mb-4">
+                            <span class="text-xs font-bold text-blue-600 uppercase tracking-wide">{{ $product->category->name }}</span>
+                            <h3 class="font-bold text-xl mt-1 text-gray-900">{{ $product->name }}</h3>
+                            <p class="text-gray-500 text-sm mt-1">{{ $product->size }}</p>
                         </div>
-                        <div class="flex gap-2">
-                            <a href="{{ route('products.show', $product) }}" 
-                               class="flex-1 bg-gray-200 text-gray-800 px-3 py-2 rounded text-center hover:bg-gray-300 transition">
-                                View Details
-                            </a>
-                            @if($product->stock > 0)
-                                <form action="{{ route('cart.add') }}" method="POST" class="flex-1">
-                                    @csrf
-                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
-                                    <input type="hidden" name="quantity" value="1">
-                                    <button type="submit" class="w-full bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-700 transition">
+                        
+                        <p class="text-gray-600 text-sm mb-6 flex-grow line-clamp-3">{{ $product->description }}</p>
+                        
+                        <div class="mt-auto">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-2xl font-bold text-gray-900">${{ number_format($product->price, 2) }}</span>
+                                <span class="text-sm font-medium {{ $product->stock > 0 ? 'text-green-600' : 'text-red-600' }}">
+                                    {{ $product->stock > 0 ? "In Stock" : 'Out of stock' }}
+                                </span>
+                            </div>
+                            
+                            <div class="flex gap-3">
+                                <a href="{{ route('products.show', $product) }}" 
+                                   class="flex-1 bg-gray-100 text-gray-800 px-4 py-2.5 rounded-lg text-center font-medium hover:bg-gray-200 transition focus:ring-2 focus:ring-gray-300 focus:outline-none">
+                                    Details
+                                </a>
+                                @if($product->stock > 0)
+                                    <form action="{{ route('cart.add') }}" method="POST" class="flex-1">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-blue-700 transition focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                                            Add to Cart
+                                        </button>
+                                    </form>
+                                @else
+                                    <button disabled class="flex-1 bg-gray-100 text-gray-400 px-4 py-2.5 rounded-lg font-medium cursor-not-allowed">
                                         Add to Cart
                                     </button>
-                                </form>
-                            @else
-                                <button disabled class="flex-1 bg-gray-300 text-gray-500 px-3 py-2 rounded cursor-not-allowed">
-                                    Out of Stock
-                                </button>
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -84,7 +91,7 @@
         </div>
 
         <!-- Pagination -->
-        <div class="mt-8">
+        <div class="mt-12">
             {{ $products->links() }}
         </div>
     </div>
