@@ -26,6 +26,9 @@
                         <x-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">
                             Cart
                         </x-nav-link>
+                        <x-nav-link :href="route('wishlist.index')" :active="request()->routeIs('wishlist.*')">
+                            Wishlist
+                        </x-nav-link>
                         <x-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
                             My Orders
                         </x-nav-link>
@@ -106,6 +109,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">
                     Cart
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('wishlist.index')" :active="request()->routeIs('wishlist.*')">
+                    Wishlist
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('orders.index')" :active="request()->routeIs('orders.*')">
                     My Orders

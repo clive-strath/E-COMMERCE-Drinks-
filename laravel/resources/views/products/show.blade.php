@@ -50,17 +50,64 @@
                 </div>
 
                 @if($product->stock > 0)
-                    <form action="{{ route('cart.add') }}" method="POST" class="mb-6">
+            <div class="mb-6">
+                <div class="flex items-center gap-4 mb-4">
+                    <label for="quantity-input" class="text-sm font-medium">Quantity:</label>
+                    <input type="number" id="quantity-input" value="1" min="1" max="{{ $product->stock }}" 
+                           class="w-20 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="flex gap-4">
+                    <form action="{{ route('cart.add') }}" method="POST" class="flex-1">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <div class="flex items-center gap-4 mb-4">
-                            <label for="quantity" class="text-sm font-medium">Quantity:</label>
-                            <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ $product->stock }}" 
-                                   class="w-20 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        </div>
-                        <button type="submit" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-semibold">
+                        <input type="hidden" name="quantity" id="cart-quantity" value="1">
+                        <button type="submit" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
                             Add to Cart
                         </button>
+                    </form>
+                    <form action="{{ route('checkout.store') }}" method="POST" class="flex-1">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="quantity" id="buy-quantity" value="1">
+                        <button type="submit" class="w-full bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition">
+                            Buy Now
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <script>
+                document.getElementById('quantity-input').addEventListener('input', function() {
+                    document.getElementById('cart-quantity').value = this.value;
+                    document.getElementById('buy-quantity').value = this.value;
+                });
+            </script>
+                            @if(auth()->check())
+                                @php
+                                    $inWishlist = auth()->user()->wishlists()->where('product_id', $product->id)->exists();
+                                @endphp
+                                @if($inWishlist)
+                                    <form action="{{ route('wishlist.destroy', auth()->user()->wishlists()->where('product_id', $product->id)->first()) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="bg-red-50 text-red-600 border border-red-200 px-4 py-3 rounded-lg hover:bg-red-100 transition" title="Remove from Wishlist">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('wishlist.store') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <button type="submit" class="bg-gray-50 text-gray-600 border border-gray-200 px-4 py-3 rounded-lg hover:bg-gray-100 transition" title="Add to Wishlist">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                            </svg>
+                                        </button>
+                                    </form>
+                                @endif
+                            @endif
+                        </div>
                     </form>
                 @else
                     <button disabled class="w-full bg-gray-300 text-gray-500 px-6 py-3 rounded-lg cursor-not-allowed font-semibold mb-6">

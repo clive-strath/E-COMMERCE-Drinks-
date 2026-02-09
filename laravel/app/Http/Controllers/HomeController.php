@@ -10,11 +10,7 @@ class HomeController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $featuredProducts = Product::where('status', 'available')
-            ->inRandomOrder()
-            ->take(8)
-            ->with('category')
-            ->get();
+        $featuredProducts = Product::featured()->inRandomOrder()->take(4)->get();
 
         return view('home', compact('categories', 'featuredProducts'));
     }

@@ -7,59 +7,39 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $orders = \App\Models\Order::with(['user', 'items.product'])->latest()->paginate(10);
+        return view('admin.orders.index', compact('orders'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show(\App\Models\Order $order)
     {
-        //
+        $order->load(['user', 'items.product']);
+        return view('admin.orders.show', compact('order'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function update(Request $request, \App\Models\Order $order)
     {
-        //
-    }
+        $request->validate([
+            'status' => 'required|in:pending,processing,shipped,delivered,cancelled',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $oldStatus = $order->status;
+        $order->status = $request->status;
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        // If marking as delivered, ensure payment is marked as paid
+        if ($request->status === 'delivered' && $order->payment_status !== 'paid') {
+            $order->payment_status = 'paid';
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        $order->save();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        // Send notification to user when order is delivered
+        if ($request->status === 'delivered' && $oldStatus !== 'delivered') {
+            $order->user->notify(new \App\Notifications\OrderDelivered($order));
+        }
+
+        return back()->with('success', 'Order status updated successfully.');
     }
 }

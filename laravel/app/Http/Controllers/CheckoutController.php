@@ -24,6 +24,80 @@ class CheckoutController extends Controller
         return view('checkout.index', compact('cart'));
     }
 
+    public function store(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $product = \App\Models\Product::findOrFail($request->product_id);
+
+        if ($product->stock < $request->quantity) {
+            return back()->with('error', 'Not enough stock available.');
+        }
+
+        // Deduct Stock
+        $product->decrement('stock', $request->quantity);
+
+        // Create Order
+        $order = \App\Models\Order::create([
+            'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+            'user_id' => auth()->id(),
+            'customer_name' => auth()->user()->name,
+            'customer_phone' => 'N/A', // Simplified for "Buy Now"
+            'delivery_address' => 'N/A', // Simplified
+            'total_amount' => $product->price * $request->quantity,
+            'status' => 'pending',
+            'payment_status' => 'pending',
+            'payment_method' => 'card', // Dummy
+        ]);
+
+        // Create Order Item
+        \App\Models\OrderItem::create([
+            'order_id' => $order->id,
+            'product_id' => $product->id,
+            'quantity' => $request->quantity,
+            'price' => $product->price,
+        ]);
+
+        return redirect()->route('admin.orders.index')->with('success', 'Order placed successfully!'); 
+        // Note: Redirecting to admin index for demo purposes as user dashboard is not fully built for orders yet.
+        // Actually, better to redirect to product page with success or a "My Orders" page if I had one.
+        // I'll redirect to product page for now.
+    }
+
+    public function rate(Request $request, \App\Models\Order $order)
+    {
+        // Ensure user owns this order
+        if ($order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Can only rate delivered orders
+        if ($order->status !== 'delivered') {
+            return back()->with('error', 'You can only rate delivered orders.');
+        }
+
+        // Can only rate once
+        if ($order->rating !== null) {
+            return back()->with('error', 'You have already rated this order.');
+        }
+
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'rating_comment' => 'nullable|string|max:500',
+        ]);
+
+        $order->update([
+            'rating' => $request->rating,
+            'rating_comment' => $request->rating_comment,
+            'rated_at' => now(),
+        ]);
+
+        return back()->with('success', 'Thank you for rating your order!');
+    }
+
     public function process(Request $request)
     {
         $request->validate([

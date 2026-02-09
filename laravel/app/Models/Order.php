@@ -7,13 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     protected $fillable = [
-        'order_number', 'user_id', 'customer_name', 'customer_phone',
-        'delivery_address', 'city', 'delivery_instructions', 'total_amount',
-        'status', 'payment_status', 'payment_method'
+        'order_number',
+        'user_id',
+        'customer_name',
+        'customer_phone',
+        'delivery_address',
+        'city',
+        'delivery_instructions',
+        'total_amount',
+        'status',
+        'payment_status',
+        'payment_method',
+        'rating',
+        'rating_comment',
+        'rated_at',
     ];
 
     protected $casts = [
         'total_amount' => 'decimal:2',
+        'rated_at' => 'datetime',
     ];
 
     public function user()
@@ -21,6 +33,11 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+    
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);

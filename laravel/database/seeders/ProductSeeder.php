@@ -112,6 +112,61 @@ class ProductSeeder extends Seeder
                 'category_id' => 5, // Hot Beverages
                 'image' => 'products/coffee.jpg',
             ],
+            [
+                'name' => 'Mountain Dew 500ml',
+                'slug' => 'mountain-dew-500ml',
+                'description' => 'Citrus soda with a kick of caffeine',
+                'price' => 1.60,
+                'size' => '500ml',
+                'stock' => 90,
+                'status' => 'available',
+                'category_id' => 1, // Soft Drinks
+                'image' => 'products/mountain-dew.png',
+            ],
+            [
+                'name' => 'Pineapple Juice 1L',
+                'slug' => 'pineapple-juice-1l',
+                'description' => 'Tropical pineapple juice',
+                'price' => 4.25,
+                'size' => '1L',
+                'stock' => 40,
+                'status' => 'available',
+                'category_id' => 2, // Fresh Juice
+                'image' => 'products/pineapple-juice.png',
+            ],
+            [
+                'name' => 'Rockstar Energy 500ml',
+                'slug' => 'rockstar-energy-500ml',
+                'description' => 'High energy drink for active lifestyles',
+                'price' => 2.80,
+                'size' => '500ml',
+                'stock' => 60,
+                'status' => 'available',
+                'category_id' => 3, // Energy Drinks
+                'image' => 'products/rockstar-energy.png',
+            ],
+            [
+                'name' => 'Perrier Sparkling Water 330ml',
+                'slug' => 'perrier-sparkling-water-330ml',
+                'description' => 'Premium sparkling mineral water',
+                'price' => 1.99,
+                'size' => '330ml',
+                'stock' => 150,
+                'status' => 'available',
+                'category_id' => 4, // Bottled Water
+                'image' => 'products/perrier-water.png',
+            ],
+            [
+                'name' => 'Latte Coffee 300ml',
+                'slug' => 'latte-coffee-300ml',
+                'description' => 'Creamy latte with a hint of vanilla',
+                'price' => 3.50,
+                'size' => '300ml',
+                'stock' => 70,
+                'status' => 'available',
+                'category_id' => 5, // Hot Beverages
+                'image' => 'products/latte-coffee.png',
+            ],
         ];
 
         foreach ($products as $product) {

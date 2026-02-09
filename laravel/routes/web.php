@@ -8,6 +8,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -27,7 +28,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
     Route::get('/orders', [CheckoutController::class, 'orders'])->name('orders.index');
+    Route::get('/orders', [CheckoutController::class, 'orders'])->name('orders.index');
     Route::get('/orders/{order}', [CheckoutController::class, 'show'])->name('orders.show');
+
+    // Wishlist Routes
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/wishlist/{wishlist}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+
+    // Checkout Routes
+    Route::post('/checkout/buy-now', [\App\Http\Controllers\CheckoutController::class, 'store'])->name('checkout.store');
+    
+    // Order Rating Route
+    Route::post('/orders/{order}/rate', [\App\Http\Controllers\CheckoutController::class, 'rate'])->name('orders.rate');
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

@@ -32,8 +32,8 @@ class ProductController extends Controller
 
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
-            ->where('status', 'available')
-            ->take(4)
+            ->inRandomOrder()
+            ->take(3)
             ->get();
 
         return view('products.show', compact('product', 'relatedProducts'));
